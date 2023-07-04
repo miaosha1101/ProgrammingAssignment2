@@ -1,42 +1,36 @@
-## Put comments here that give an overall description of what your
-## functions do
+## R Programming Assignment 2: 
+## Caching the Inverse of a Function
 
-## Write a short comment describing this function
+## Generate a special matrix object that can cache its inverse
+## assuming the supplied matrix is invertible
 
 makeCacheMatrix <- function(x = matrix()) {
-
+  x_inverse <- NULL
+  reset <- function(y) {
+    x <<- y
+    x_inverse <<- NULL
+  }
+  getMatrix <- function() x
+  getInverse <- function() x_inverse
+  setInverse <- function(z) x_inverse <<- z 
+  list(reset = reset, 
+       getMatrix = getMatrix, 
+       getInverse = getInverse,
+       setInverse = setInverse )
 }
 
-
-## Write a short comment describing this function
+## Computes the inverse of the special matrix returned by makeCacheMatrix. 
+## If the inverse has already been calculated and the matrix has not changed,
+## then cacheSolve should retrieve the inverse from the cache.
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+  x_inverse <- x$getInverse()
+  if(!is.null(x_inverse)){
+    message("getting cached data")
+    return(x_inverse)
+  }
+  data <- x$getMatrix()
+  x_inverse <- solve(data)
+  x$setInverse(x_inverse)
+  x_inverse
 }
-
-
-makeVector <- function(x = numeric()) {
-+     m <- NULL
-+     set <- function(y) {
-+         x <<- y
-+         m <<- NULL
-+     }
-+     get <- function() x
-+     setmean <- function(mean) m <<- mean
-+     getmean <- function() m
-+     list(set = set, get = get,
-+          setmean = setmean,
-+          getmean = getmean)
-+ }
-> 
-> cachemean <- function(x, ...) {
-+     m <- x$getmean()
-+     if(!is.null(m)) {
-+         message("getting cached data")
-+         return(m)
-+     }
-+     data <- x$get()
-+     m <- mean(data, ...)
-+     x$setmean(m)
-+     m
-+ }
